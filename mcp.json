@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "course-recommender": {
+      "url": "https://course-recommender-mcp.vercel.app/mcp"
+    }
+  }
+} 
