@@ -175,3 +175,21 @@ MIT License. See the [LICENSE](LICENSE) file for details.
 - Maintainer: Vasu Patel
 
 This project is open source—use it as a reference or as a starting point for your own MCP development.
+
+---
+
+## Claude Desktop AI Integration
+
+To use this To-Do Manager MCP Server with Claude Desktop AI, add the following block to your `mcp.json` configuration file:
+
+```json
+{
+  "mcpServers": {
+    "to-do-manager": {
+      "url": "https://to-do-manager-mcp-server.vercel.app/mcp"
+    }
+  }
+}
+```
+
+This will enable Claude Desktop AI to interact directly with your to-do manager server.
