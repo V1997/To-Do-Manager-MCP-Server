@@ -1,29 +1,26 @@
 # To-Do Manager MCP Server
 
- 
-Welcome to your next productivity boost! This project is a modern, AI-ready To-Do Manager server, designed to work seamlessly with Model Context Protocol (MCP) clients and AI assistants. Whether you're a developer, a student, or just someone who loves organized lists, this project is for you.
+A server for managing to-do items via the Model Context Protocol (MCP). Designed for integration with AI assistants and MCP-compatible clients. Provides persistent, auto-expiring to-do storage using Redis and is deployable on Vercel.
 
 ---
 
-## 🚀 Project Description
+## Project Description
 
-The To-Do Manager MCP Server is a cloud-ready backend that lets you add, list, update, and delete to-do items via a simple API. It’s built for integration with AI tools (like Claude Desktop) and supports persistent, auto-expiring storage using Redis. No more sticky notes—let your AI manage your tasks!
-
----
-
-## ✨ Features
-
-- **Add To-Dos:** Quickly add new tasks to your list.
-- **List To-Dos:** View all your current tasks, including their status.
-- **Update To-Dos:** Mark tasks as completed or edit their text.
-- **Delete To-Dos:** Remove individual tasks or clear your entire list.
-- **Auto-Expire:** To-dos are automatically deleted after 3 hours—perfect for short-term focus!
-- **MCP Integration:** Works out-of-the-box with MCP-compatible AI clients.
-- **Cloud-Ready:** Deployable on Vercel with managed Redis for persistence.
+This project implements a to-do manager API with add, list, update, and delete operations. It is intended for use with MCP clients and AI tools, and is suitable as a reference or starting point for MCP-based integrations.
 
 ---
 
-## 🛠️ Installation Instructions
+## Features
+
+- Add, list, update, and delete to-do items
+- Auto-expiry: to-dos are deleted after 3 hours
+- Persistent storage using Redis
+- MCP protocol support for AI and automation workflows
+- Deployable on Vercel
+
+---
+
+## Installation
 
 1. **Clone the repository:**
    ```sh
@@ -34,13 +31,13 @@ The To-Do Manager MCP Server is a cloud-ready backend that lets you add, list, u
    ```sh
    npm install
    ```
-3. **Set up Redis:**
-   - Use a managed Redis service (e.g., Upstash, Redis Cloud).
-   - Add your Redis connection string to a `.env.local` file:
+3. **Configure Redis:**
+   - Use a managed Redis service (Upstash, Redis Cloud, or Vercel Redis integration).
+   - Add your Redis connection string to `.env.local`:
      ```env
      REDIS_URL=your_redis_connection_url
      ```
-4. **Run the development server:**
+4. **Start the development server:**
    ```sh
    npm run dev
    ```
@@ -48,11 +45,70 @@ The To-Do Manager MCP Server is a cloud-ready backend that lets you add, list, u
 
 ---
 
-## 💡 Usage
+## Deployment & Technical Details
 
-You can interact with the To-Do Manager via any MCP-compatible client or directly with HTTP requests.
+### Vercel Deployment
 
-### **Add a To-Do**
+- Connect your GitHub repository to Vercel.
+- Set the `REDIS_URL` environment variable in Vercel project settings.
+- Vercel will build and deploy on each push to the main branch.
+- The application will be available at a Vercel-provided URL.
+
+### Redis Usage
+
+- Each to-do is stored as a Redis hash (`todo:{id}`) with fields: `id`, `text`, `completed`, `createdAt`.
+- A Redis list (`todos`) maintains the order of to-do IDs.
+- All Redis operations are performed per request; the Redis client is created and closed in each handler for serverless compatibility.
+
+### Auto-Expiry
+
+- When a to-do is created, a 3-hour TTL is set using Redis `EXPIRE`.
+- After 3 hours, Redis deletes the to-do hash automatically.
+- On list/update, expired IDs are removed from the `todos` list.
+
+---
+
+## Live Chat Examples
+
+**Add a To-Do**
+```
+User: Add "Buy groceries" to my to-do list using the To-Do Manager tool.
+Assistant: Added to-do: Buy groceries
+```
+
+**List To-Dos**
+```
+User: Show me my current to-dos with the To-Do Manager tool.
+Assistant:
+Current to-dos:
+1751776995308: Buy groceries [ ]
+```
+
+**Mark a To-Do as Completed**
+```
+User: Mark the to-do with ID 1751776995308 as completed using the To-Do Manager tool.
+Assistant: Updated to-do 1751776995308.
+```
+
+**Delete a To-Do**
+```
+User: Delete the to-do with ID 1751776995308 using the To-Do Manager tool.
+Assistant: Deleted to-do 1751776995308.
+```
+
+**Delete All To-Dos**
+```
+User: Clear all my to-dos using the To-Do Manager tool.
+Assistant: Deleted all to-dos.
+```
+
+---
+
+## Usage
+
+Interact with the To-Do Manager via any MCP-compatible client or with HTTP requests.
+
+**Add a To-Do**
 ```bash
 curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
@@ -60,7 +116,7 @@ curl -X POST http://localhost:3000/mcp \
   -d '{"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "To-Do Manager", "arguments": {"action": "add", "text": "Buy groceries"}}}'
 ```
 
-### **List To-Dos**
+**List To-Dos**
 ```bash
 curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
@@ -68,7 +124,7 @@ curl -X POST http://localhost:3000/mcp \
   -d '{"jsonrpc": "2.0", "id": 2, "method": "tools/call", "params": {"name": "To-Do Manager", "arguments": {"action": "list"}}}'
 ```
 
-### **Update a To-Do**
+**Update a To-Do**
 ```bash
 curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
@@ -76,7 +132,7 @@ curl -X POST http://localhost:3000/mcp \
   -d '{"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {"name": "To-Do Manager", "arguments": {"action": "update", "todoId": "YOUR_TODO_ID", "completed": true}}}'
 ```
 
-### **Delete All To-Dos**
+**Delete All To-Dos**
 ```bash
 curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
@@ -86,41 +142,36 @@ curl -X POST http://localhost:3000/mcp \
 
 ---
 
-## 🧰 Technologies Used
+## Technologies Used
 
-- **TypeScript** – Type-safe JavaScript for robust code
-- **Next.js** – Modern React framework for serverless APIs
-- **Redis** – Fast, in-memory data store for persistent to-dos
-- **@vercel/mcp-adapter** – MCP integration for AI tools
-- **Zod** – Schema validation for safe API contracts
-- **Vercel** – Effortless cloud deployment
+- TypeScript
+- Next.js
+- Redis
+- @vercel/mcp-adapter
+- Zod
+- Vercel
 
 ---
 
-## 🤝 Contributing Guidelines
+## Contributing
 
-We love contributions! To help improve this project:
 1. Fork the repository
 2. Create a new branch (`git checkout -b feature/your-feature`)
 3. Make your changes and commit them
 4. Push to your fork and open a Pull Request
-5. Describe your changes and why they’re awesome!
-
-All skill levels are welcome—let’s build something great together!
 
 ---
 
-## 📄 License
+## License
 
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 📬 Contact Information
+## Contact
 
-Have questions, feedback, or want to collaborate?
-- **GitHub Issues:** [Open an issue](https://github.com/V1997/course-recommender-mcp/issues)
-- **Email:** patelvasu1997@gmail.com
-- **Maintainer:** Vasu Patel
+- GitHub Issues: [Open an issue](https://github.com/V1997/course-recommender-mcp/issues)
+- Email: patelvasu1997@gmail.com
+- Maintainer: Vasu Patel
 
-**This project is open source—use it as a reference or as a starting point for your own MCP development. Happy building! 🚀**
+This project is open source—use it as a reference or as a starting point for your own MCP development.
