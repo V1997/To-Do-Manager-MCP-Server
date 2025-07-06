@@ -24,8 +24,8 @@ This project implements a to-do manager API with add, list, update, and delete o
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/V1997/course-recommender-mcp.git
-   cd course-recommender-mcp
+   git clone https://github.com/V1997/To-Do-Manager-MCP-Server.git
+   cd To-Do-Manager-MCP-Server
    ```
 2. **Install dependencies:**
    ```sh
@@ -170,7 +170,7 @@ MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Contact
 
-- GitHub Issues: [Open an issue](https://github.com/V1997/course-recommender-mcp/issues)
+- GitHub Issues: [Open an issue](https://github.com/V1997/To-Do-Manager-MCP-Server/issues)
 - Email: patelvasu1997@gmail.com
 - Maintainer: Vasu Patel
 
