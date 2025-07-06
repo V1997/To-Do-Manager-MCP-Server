@@ -2,26 +2,31 @@ import { createMcpHandler } from "@vercel/mcp-adapter";
 import z from "zod";
 import { createClient } from "redis";
 
-// Use Vercel's built-in Redis integration (no external URL needed)
-const redis = createClient();
-
 const THREE_HOURS_SEC = 3 * 60 * 60;
 
+async function getRedis() {
+  const client = createClient();
+  await client.connect();
+  return client;
+}
+
 async function addTodo(text: string) {
+  const redis = await getRedis();
   const id = String(Date.now() + Math.floor(Math.random() * 10000));
   const todo = { id, text, completed: "false", createdAt: Date.now().toString() };
   await redis.hSet(`todo:${id}`, todo);
   await redis.expire(`todo:${id}`, THREE_HOURS_SEC);
   await redis.lPush("todos", id);
+  await redis.quit();
   return { ...todo, completed: false, createdAt: Number(todo.createdAt) };
 }
 
 async function listTodos() {
+  const redis = await getRedis();
   const ids = await redis.lRange("todos", 0, -1);
   const todos = await Promise.all(
     ids.map(async (id: string) => {
       const todo = await redis.hGetAll(`todo:${id}`);
-      // If expired, hGetAll returns empty object
       if (Object.keys(todo).length === 0) {
         await redis.lRem("todos", 0, id);
         return null;
@@ -34,16 +39,21 @@ async function listTodos() {
       };
     })
   );
-  // Filter out nulls (expired)
+  await redis.quit();
   return todos.filter(Boolean);
 }
 
 async function updateTodo(id: string, text?: string, completed?: boolean) {
+  const redis = await getRedis();
   const todo = await redis.hGetAll(`todo:${id}`);
-  if (Object.keys(todo).length === 0) return null;
+  if (Object.keys(todo).length === 0) {
+    await redis.quit();
+    return null;
+  }
   if (typeof text === "string") todo.text = text;
   if (typeof completed === "boolean") todo.completed = completed ? "true" : "false";
   await redis.hSet(`todo:${id}`, todo);
+  await redis.quit();
   return {
     id: todo.id,
     text: todo.text,
@@ -53,19 +63,22 @@ async function updateTodo(id: string, text?: string, completed?: boolean) {
 }
 
 async function deleteTodo(id: string) {
+  const redis = await getRedis();
   await redis.del(`todo:${id}`);
   await redis.lRem("todos", 0, id);
+  await redis.quit();
 }
 
 async function deleteAllTodos() {
+  const redis = await getRedis();
   const ids = await redis.lRange("todos", 0, -1);
   await Promise.all(ids.map((id: string) => redis.del(`todo:${id}`)));
   await redis.del("todos");
+  await redis.quit();
 }
 
 const handler = createMcpHandler(
   (server) => {
-    // Course Recommender tool (existing)
     server.tool(
       "Course Recommender",
       "Give a course recommendation based on experience level",
@@ -89,7 +102,6 @@ const handler = createMcpHandler(
       })
     );
 
-    // Todo Manager tool
     server.tool(
       "To-Do Manager",
       "Manage a simple to-do list (add, list, update, delete)",
