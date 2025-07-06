@@ -72,7 +72,7 @@ const handler = createMcpHandler(
       {
         experienceLevel: z.enum(["beginner", "intermediate", "advanced"]),
       },
-      ({ experienceLevel }, _extra) => ({
+      ({ experienceLevel }, _) => ({
         content: [
           {
             type: "text" as const,
@@ -98,7 +98,7 @@ const handler = createMcpHandler(
         todoId: z.string().optional(),
         completed: z.boolean().optional(),
       },
-      async ({ action, text, todoId, completed }, _extra) => {
+      async ({ action, text, todoId, completed }, _) => {
         if (action === "add") {
           if (!text) {
             return { content: [{ type: "text" as const, text: "Missing to-do text." }] };
