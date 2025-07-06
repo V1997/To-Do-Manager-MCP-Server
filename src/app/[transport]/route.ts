@@ -72,6 +72,7 @@ const handler = createMcpHandler(
       {
         experienceLevel: z.enum(["beginner", "intermediate", "advanced"]),
       },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ({ experienceLevel }, _) => ({
         content: [
           {
@@ -98,6 +99,7 @@ const handler = createMcpHandler(
         todoId: z.string().optional(),
         completed: z.boolean().optional(),
       },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       async ({ action, text, todoId, completed }, _) => {
         if (action === "add") {
           if (!text) {
