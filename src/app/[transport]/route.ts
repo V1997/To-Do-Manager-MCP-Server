@@ -5,7 +5,7 @@ import { createClient } from "redis";
 const THREE_HOURS_SEC = 3 * 60 * 60;
 
 async function getRedis() {
-  const client = createClient();
+  const client = createClient({ url: process.env.REDIS_URL });
   await client.connect();
   return client;
 }
