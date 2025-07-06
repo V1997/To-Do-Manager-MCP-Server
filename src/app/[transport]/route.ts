@@ -80,29 +80,6 @@ async function deleteAllTodos() {
 const handler = createMcpHandler(
   (server) => {
     server.tool(
-      "Course Recommender",
-      "Give a course recommendation based on experience level",
-      {
-        experienceLevel: z.enum(["beginner", "intermediate", "advanced"]),
-      },
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      ({ experienceLevel }, _) => ({
-        content: [
-          {
-            type: "text" as const,
-            text: `I recommend you take the ${
-              experienceLevel === "beginner"
-                ? "Professional JavaScript"
-                : experienceLevel === "intermediate"
-                ? "Professional React & Next.js"
-                : "Advanced Full-Stack Development"
-            } course.`,
-          },
-        ],
-      })
-    );
-
-    server.tool(
       "To-Do Manager",
       "Manage a simple to-do list (add, list, update, delete)",
       {
