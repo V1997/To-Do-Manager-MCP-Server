@@ -19,6 +19,23 @@ This project implements a to-do manager API with add, list, update, and delete o
 - Deployable on Vercel
 
 ---
+---
+
+## Claude Desktop AI Integration
+
+To use this To-Do Manager MCP Server with Claude Desktop AI, add the following block to your `mcp.json` configuration file:
+
+```json
+{
+  "mcpServers": {
+    "to-do-manager": {
+      "url": "https://to-do-manager-mcp-server.vercel.app/mcp"
+    }
+  }
+}
+```
+
+This will enable Claude Desktop AI to interact directly with your to-do manager server.
 
 ## Installation
 
@@ -162,12 +179,6 @@ curl -X POST http://localhost:3000/mcp \
 
 ---
 
-## License
-
-MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
 ## Contact
 
 - GitHub Issues: [Open an issue](https://github.com/V1997/To-Do-Manager-MCP-Server/issues)
@@ -176,20 +187,3 @@ MIT License. See the [LICENSE](LICENSE) file for details.
 
 This project is open source—use it as a reference or as a starting point for your own MCP development.
 
----
-
-## Claude Desktop AI Integration
-
-To use this To-Do Manager MCP Server with Claude Desktop AI, add the following block to your `mcp.json` configuration file:
-
-```json
-{
-  "mcpServers": {
-    "to-do-manager": {
-      "url": "https://to-do-manager-mcp-server.vercel.app/mcp"
-    }
-  }
-}
-```
-
-This will enable Claude Desktop AI to interact directly with your to-do manager server.
