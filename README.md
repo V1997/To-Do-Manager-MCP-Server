@@ -72,34 +72,34 @@ This project implements a to-do manager API with add, list, update, and delete o
 
 **Add a To-Do**
 ```
-User: Add "Buy groceries" to my to-do list using the To-Do Manager tool.
-Assistant: Added to-do: Buy groceries
+User: Remind me to buy groceries later today.
+Assistant: Added "buy groceries" to your to-do list.
 ```
 
 **List To-Dos**
 ```
-User: Show me my current to-dos with the To-Do Manager tool.
+User: What do I need to get done?
 Assistant:
-Current to-dos:
-1751776995308: Buy groceries [ ]
+Here are your current to-dos:
+• Buy groceries [ ]
 ```
 
 **Mark a To-Do as Completed**
 ```
-User: Mark the to-do with ID 1751776995308 as completed using the To-Do Manager tool.
-Assistant: Updated to-do 1751776995308.
+User: I finished buying groceries. Mark that as done.
+Assistant: Marked "buy groceries" as completed.
 ```
 
 **Delete a To-Do**
 ```
-User: Delete the to-do with ID 1751776995308 using the To-Do Manager tool.
-Assistant: Deleted to-do 1751776995308.
+User: Remove "buy groceries" from my list.
+Assistant: Deleted "buy groceries" from your to-dos.
 ```
 
 **Delete All To-Dos**
 ```
-User: Clear all my to-dos using the To-Do Manager tool.
-Assistant: Deleted all to-dos.
+User: Clear my entire to-do list.
+Assistant: All to-dos have been deleted.
 ```
 
 ---
