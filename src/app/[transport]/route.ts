@@ -15,7 +15,7 @@ const handler = createMcpHandler(
                         type: "text",
                         text: `I recommend you take the ${
                             experienceLevel === "beginner" 
-                            ? "Professional JavaScript Vasu"
+                            ? "Professional JavaScript Vasu Patel"
                             : experienceLevel === "intermediate"
                             ? "Professional React & Next.js"
                             : "Advanced Full-Stack Development"
