@@ -1,7 +1,7 @@
 {
   "mcpServers": {
-    "course-recommender": {
-      "url": "https://course-recommender-mcp.vercel.app/mcp"
+    "to-do-manager": {
+      "url": "https://to-do-manager-mcp-server.vercel.app/mcp"
     }
   }
-} 
+}
